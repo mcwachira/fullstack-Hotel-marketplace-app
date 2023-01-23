@@ -1,10 +1,11 @@
 import User from '../models/userModel.js'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 export const register = async (req, res) => {
 
     console.log(req.body)
     const { fullName, email, password, confirmPassword } = req.body
-    console.log(confirmPassword)
+
 
     if (!fullName || !email || !password || !confirmPassword) {
         return res.status(400).json({ message: 'please  fill in all the fields' })
@@ -46,4 +47,44 @@ export const register = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+export const login = async (req, res) => {
+    console.log(req.body)
+    const { email, password } = req.body
+
+    try {
+
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'please  fill in all the fields' })
+        }
+
+        //check if user exist based on the  email
+        const user = await User.findOne({ email }).exec()
+        if (!user) {
+            return res.status(400).json({ message: 'User with that email does not exist' })
+        }
+
+        //check if password is same as one in the database
+
+        //check if password is correct
+
+        let value = await bcrypt.compare(password, user.password)
+
+        console.log(value)
+        if (user && value === false) {
+            return res.status(401).send({ error: 'Email and password do not match ' })
+        }
+        let token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '1d'
+        })
+
+        res.status(200).json({ token, user })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+
 }

@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 import { toast } from 'react-toastify';
-import { register } from '../actions/auth';
+import { login } from '../actions/auth';
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-const RegisterForm = () => {
+const LoginForm = () => {
     const [formData, setFormData] = useState({
 
-        fullName: "",
+
         email: "",
         password: "",
-        confirmPassword: ""
+
     })
 
+    const dispatch = useDispatch()
     const Navigate = useNavigate()
-
     const handleChange = (e) => {
 
         const { name, value } = e.target
@@ -27,15 +29,25 @@ const RegisterForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await register({
-                fullName: formData.fullName,
+            const res = await login({
+
                 email: formData.email,
                 password: formData.password,
-                confirmPassword: formData.confirmPassword,
+
             })
 
-            toast.success('Registered successfully please login')
-            Navigate('/login')
+            if (res) {
+                //save to local storage
+                window.localStorage.setItem('auth', JSON.stringify(res.data))
+            }
+
+            dispatch({
+                type: 'LOGGED_IN_USER',
+                payload: res.data
+            })
+
+            toast.success('Login successfully')
+            Navigate('/')
         } catch (error) {
             if (error.response.status) {
                 toast.error(error.response.data.message)
@@ -45,16 +57,13 @@ const RegisterForm = () => {
 
 
     }
-    const { fullName, email, password, confirmPassword } = formData
+    const { email, password } = formData
     return (
 
         <>
 
             <form onSubmit={handleSubmit} className='md-3'>
-                <div className="form-group mb-3">
-                    <label> Full Name</label>
-                    <input type='text' name='fullName' className='form-control' placeholder='Enter fullName' value={fullName} onChange={handleChange} />
-                </div>
+
                 <div className="form-group mb-3">
                     <label className='form-label'> Email</label>
                     <input type='email' name='email' className='form-control' placeholder='Enter email' value={email} onChange={handleChange} />
@@ -63,14 +72,11 @@ const RegisterForm = () => {
                     <label className='form-label'> Password</label>
                     <input type='password' name='password' className='form-control' placeholder='Enter password' value={password} onChange={handleChange} />
                 </div>
-                <div className="form-group mb-3">
-                    <label className='form-label'> Confirm Password</label>
-                    <input type='password' name='confirmPassword' className='form-control' placeholder='Repeat password' value={confirmPassword} onChange={handleChange} />
-                </div>
-                <button disabled={!fullName || !email || !password || !confirmPassword} className="btn btn-primary">Submit</button>
+
+                <button disabled={!email || !password} className="btn btn-primary">Submit</button>
             </form>
         </>
     )
 }
 
-export default RegisterForm
+export default LoginForm

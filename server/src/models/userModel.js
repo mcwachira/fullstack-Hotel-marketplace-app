@@ -53,5 +53,14 @@ const userSchema = new mongoose.Schema({
 //         return next()
 //     }
 // })
+// userSchema.methods.comparePassword = function (password, next) {
+//     bcrypt.compare(password, this.password, function (error, match) {
+//         if (error) {
+//             return next(error, false)
+//         }
+
+//         return next(null, match)
+//     })
+// }
 
 export default mongoose.model('User', userSchema)
