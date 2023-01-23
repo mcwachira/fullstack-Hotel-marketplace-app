@@ -30,9 +30,19 @@ const Navbar = () => {
                 <Link className="nav-link" to='/'>
                     Home
                 </Link>
-                {auth !== null && (<a className="nav-link" onClick={logout}>
-                    LogOut
-                </a>)}
+
+                {auth !== null && (
+                    <>
+
+                        <Link className="nav-link" to='/dashboard'>
+                            Dashboard
+                        </Link>
+                        <a className="nav-link" onClick={logout}>
+                            LogOut
+                        </a>
+
+                    </>
+                )}
                 {auth === null && (<>
                     <Link className="nav-link" to='/login'>
                         Login
