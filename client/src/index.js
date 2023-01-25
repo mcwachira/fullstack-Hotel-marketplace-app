@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import 'antd/dist/reset.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -13,6 +16,7 @@ root.render(
     <Provider store={store}>
       <Router>
         <App />
+        <ToastContainer />
       </Router>
     </Provider>
 
