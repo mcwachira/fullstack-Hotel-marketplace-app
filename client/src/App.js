@@ -7,6 +7,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import Dashboard from "./pages/User/Dashboard";
 import DashboardSeller from "./pages/User/DashboardSeller";
 import NewHotel from "./pages/hotels/NewHotel";
+import StripeCallback from "./pages/stripe/StripeCallback";
 function App() {
 
 
@@ -37,6 +38,8 @@ function App() {
             </ProtectedRoute>
           } />
 
+
+          <Route path='/stripe/callback' element={<StripeCallback />} />
         </Route>
       </Routes>
     </>

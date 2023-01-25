@@ -1,11 +1,83 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DashboardNav from '../../components/DashboardNav'
 import ConnectNav from '../../components/ConnectNav'
 import { Link } from 'react-router-dom'
+//import { useSyncExternalStore } from 'react'
+import { useSelector } from 'react-redux'
+import { createConnectAccount } from '../../actions/stripe'
+import {
+    HomeOutlined, TaobaoOutlined,
 
-
+} from '@ant-design/icons';
+import { toast } from 'react-toastify'
 
 const DashboardSeller = () => {
+
+    const { auth } = useSelector((state) => ({ ...state }))
+
+    const [loading, setLoading] = useState(false)
+    //    console.log(auth)
+
+    const handleClick = async () => {
+        setLoading(true)
+        try {
+            const res = await createConnectAccount(auth.token)
+            console.log(res)
+            window.location.href = res.data
+        } catch (error) {
+            console.log(error)
+            toast.error('Stripe connection failed try again')
+
+        }
+
+    }
+    const connected = () => (
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-md-10">
+                    <h2>
+                        Your Hotels
+                    </h2>
+                </div>
+                <div className="col-md-2">
+                    <Link to='/new' className='btn btn-primary'>
+                        + Add New
+                    </Link>
+                </div>
+            </div>
+        </div>
+    )
+
+    const notConnected = () => (
+        <div className="container-fluid">
+            <div className="row">
+
+                <div className="col-md-6 offset-md-3 text-center">
+                    <div className="p-5 pointer">
+                        <HomeOutlined className='h1' />
+                        <h4>
+                            Set Up payments to post hotel rooms
+                        </h4>
+
+                        <p className="lead">
+                            Mern Patners with stripe to transfer earnings to your bank account
+                        </p>
+                        <button className="btn btn-primary mb-3" onClick={handleClick} disabled={loading}>
+                            {loading ? "processing payments ..." : " Setup Payouts"}
+
+                        </button>
+
+                        <div className="text-muted">
+                            <small>
+                                You will be directed to stripe to complete the on boarding
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    )
     return (
         <>
             <div className="container-fluid bg-secondary p-5">
@@ -16,20 +88,15 @@ const DashboardSeller = () => {
 
             </div>
 
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-10">
-                        <h2>
-                            Your Hotels
-                        </h2>
-                    </div>
-                    <div className="col-md-2">
-                        <Link to='/new' className='btn btn-primary'>
-                            + Add New
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            {auth &&
+                auth.user &&
+                auth.user.stripe_seller &&
+                auth.user.stripe_seller.charges_enabled
+                ? connected()
+                : notConnected()}
+
+
+
         </>
     )
 }

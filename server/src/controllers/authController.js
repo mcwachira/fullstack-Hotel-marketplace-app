@@ -80,7 +80,11 @@ export const login = async (req, res) => {
             expiresIn: '1d'
         })
 
-        res.status(200).json({ token, user })
+        console.log(user)
+
+        res.status(200).json({
+            token, user
+        })
 
 
     } catch (error) {
