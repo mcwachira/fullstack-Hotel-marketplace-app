@@ -9,8 +9,8 @@ const Navbar = () => {
     const Navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { auth } = useSelector((state) => (state))
-    console.log(auth)
+    const { auth } = useSelector((state) => ({ ...state }))
+
 
     const logout = () => {
 
