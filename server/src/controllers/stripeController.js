@@ -72,14 +72,23 @@ export const getAccountStatus = async (req, res) => {
     //updte delay days 
     const updateAccount = await updateDelayDays(account.Id)
 
-    const updatedUser = await User.findByIdAndUpdate(
-        user._id, {
-        //save the updated account with updated delay days
-        stripe_seller: updateAccount
-    },
-        { new: true }
-    ).select("-password -confirmPassword").exec()
-    // console.log(updatedUser)
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            user._id, {
+            //save the updated account with updated delay days
+            stripe_seller: updateAccount
+        },
+            { new: true }
+        ).select("-password -confirmPassword").exec()
+        console.log(updatedUser)
+
+
+        res.json(updatedUser)
+
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 export const getAccountBalance = async (req, res) => {

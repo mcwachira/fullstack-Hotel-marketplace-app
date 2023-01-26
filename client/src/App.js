@@ -8,6 +8,7 @@ import Dashboard from "./pages/User/Dashboard";
 import DashboardSeller from "./pages/User/DashboardSeller";
 import NewHotel from "./pages/hotels/NewHotel";
 import StripeCallback from "./pages/stripe/StripeCallback";
+import EditHotel from "./pages/hotels/EditHotel";
 function App() {
 
 
@@ -32,12 +33,18 @@ function App() {
             </ProtectedRoute>
           } />
 
+
           <Route path='/new' element={
             <ProtectedRoute>
               <NewHotel />
             </ProtectedRoute>
           } />
 
+          <Route path='/hotel/edit/:hotelId' element={
+            <ProtectedRoute>
+              <EditHotel />
+            </ProtectedRoute>
+          } />
 
           <Route path='/stripe/callback' element={<StripeCallback />} />
         </Route>
