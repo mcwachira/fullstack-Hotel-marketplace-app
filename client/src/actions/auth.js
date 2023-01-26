@@ -14,7 +14,9 @@ export const updateUserInLocalStorage = (user, next) => {
         localStorage.setItem('auth', JSON.stringify(auth))
 
         //why are we calling next?
-        // next();
+        //callback function
+        next();
     }
 
 }
+

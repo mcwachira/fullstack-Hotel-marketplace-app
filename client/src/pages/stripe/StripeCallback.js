@@ -16,6 +16,7 @@ const StripeCallback = () => {
     const accountStatus = async () => {
         try {
             const res = await getAccountStatus(auth.token)
+            console.log(res)
             updateUserInLocalStorage(res.data, () => {
                 dispatch({
                     type: 'LOGGED_IN_USER',

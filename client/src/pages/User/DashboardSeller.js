@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DashboardNav from '../../components/DashboardNav'
 import ConnectNav from '../../components/ConnectNav'
 import { Link } from 'react-router-dom'
@@ -10,11 +10,15 @@ import {
 
 } from '@ant-design/icons';
 import { toast } from 'react-toastify'
+import { deleteHotel, getSellerHotels } from '../../actions/hotel'
+import HotelCards from '../../components/HotelCards'
 
 const DashboardSeller = () => {
 
     const { auth } = useSelector((state) => ({ ...state }))
 
+
+    const [hotels, setHotels] = useState([])
     const [loading, setLoading] = useState(false)
     //    console.log(auth)
 
@@ -31,6 +35,33 @@ const DashboardSeller = () => {
         }
 
     }
+
+
+    const showSelersHotels = async (authToken) => {
+
+        const res = await getSellerHotels(authToken)
+
+        setHotels(res.data)
+
+    }
+
+    //not necesary to recieve token from child component
+    const handleDelete = async (id, token) => {
+        if (!window.confirm('Are you suure?')) return
+        console.log(auth.token)
+        const response = await deleteHotel(id, auth.token)
+        if (response) {
+            toast.success('deleted hotel succesfully')
+            showSelersHotels()
+        } else {
+            toast.error('error deleting hotel')
+        }
+    }
+
+    useEffect(() => {
+
+        showSelersHotels(auth.token)
+    }, [])
     const connected = () => (
         <div className="container-fluid">
             <div className="row">
@@ -43,7 +74,15 @@ const DashboardSeller = () => {
                     <Link to='/new' className='btn btn-primary'>
                         + Add New
                     </Link>
+
+                    {/* <Link to='/' className='btn btn-primary'>
+                        Browse Hotels
+                    </Link> */}
                 </div>
+            </div>
+
+            <div className="row">
+                {hotels.map((hotel) => <HotelCards key={hotel._id} hotel={hotel} showViewMoreBUtton={false} owner={true} handleDelete={handleDelete} />)}
             </div>
         </div>
     )
