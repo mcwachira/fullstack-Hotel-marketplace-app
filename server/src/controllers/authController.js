@@ -41,7 +41,7 @@ export const register = async (req, res) => {
         await User.create(newUser)
         console.log(newUser)
         if (newUser) {
-            res.status(201).json({ message: 'new user created' })
+            return res.status(201).json({ message: 'new user created' })
         }
 
     } catch (error) {

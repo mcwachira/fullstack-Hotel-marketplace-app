@@ -35,7 +35,7 @@ export const getHotels = async (req, res) => {
 
     try {
 
-        const allHotels = await Hotel.find({}).limit(24).select('-image.data').populate("postedBy", "id, name").exec()
+        const allHotels = await Hotel.find({}).limit(24).select('-image.data').populate("postedBy", "id, fullName").exec()
 
         if (!allHotels) {
             res.status(404).json({ message: 'no hotels found' })
@@ -72,7 +72,7 @@ export const sellerHotels = async (req, res) => {
 
     try {
 
-        const allHotels = await Hotel.find({ postedBy: req.user._id }).limit(24).select('-image.data').populate("postedBy", "id, name").exec()
+        const allHotels = await Hotel.find({ postedBy: req.user._id }).limit(24).select('-image.data').populate("postedBy", "id, fullName").exec()
 
         if (!allHotels) {
             res.status(404).json({ message: 'no hotels posted by the seller' })
@@ -117,7 +117,7 @@ export const getHotelById = async (req, res) => {
     console.log(id)
     try {
 
-        const hotel = await Hotel.findById(id).select('-image.data').exec()
+        const hotel = await Hotel.findById(id).populate('postedBy', "_id fullName").select('-image.data').exec()
         console.log(hotel)
 
         if (hotel) {

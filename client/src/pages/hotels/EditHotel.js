@@ -22,7 +22,7 @@ const EditHotel = () => {
 
     const { auth } = useSelector((state) => ({ ...state }))
     // console.log(auth)
-    const [image, setimage] = useState('')
+    const [image, setImage] = useState('')
     // const [location, setLocation] = useState("")
     const [values, setValues] = useState({
         title: "",
@@ -52,7 +52,7 @@ const EditHotel = () => {
 
         setValues(res.data)
         // setLocation(res.data.location)
-        setimage(`${process.env.REACT_APP_API}/hotels/image/${res.data._id}`)
+        setImage(`${process.env.REACT_APP_API}/hotels/image/${res.data._id}`)
     }
     useEffect(() => {
 
@@ -93,7 +93,7 @@ const EditHotel = () => {
     const handleImageChange = (e) => {
         e.preventDefault()
         console.log(e.target.files[0])
-        setimage(URL.createObjectURL(e.target.files[0]))
+        setImage(URL.createObjectURL(e.target.files[0]))
         setValues({
             ...values,
             image: e.target.files[0],

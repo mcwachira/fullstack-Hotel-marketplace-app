@@ -9,6 +9,9 @@ import DashboardSeller from "./pages/User/DashboardSeller";
 import NewHotel from "./pages/hotels/NewHotel";
 import StripeCallback from "./pages/stripe/StripeCallback";
 import EditHotel from "./pages/hotels/EditHotel";
+import ViewHotel from "./pages/hotels/ViewHotel";
+import StripeCancel from "./pages/stripe/StripeCancel";
+import StripeSuccess from "./pages/stripe/StripeSuccess";
 function App() {
 
 
@@ -21,6 +24,12 @@ function App() {
 
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
+
+          <Route path='/hotel/view/:hotelId' element={
+
+            <ViewHotel />
+
+          } />
           <Route path='/dashboard' element={
             <ProtectedRoute>
               <Dashboard />
@@ -47,6 +56,8 @@ function App() {
           } />
 
           <Route path='/stripe/callback' element={<StripeCallback />} />
+          <Route path='/stripe/success/:hotelId' element={<StripeSuccess />} />
+          <Route path='/stripe/cancel' element={<StripeCancel />} />
         </Route>
       </Routes>
     </>
