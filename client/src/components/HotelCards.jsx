@@ -31,7 +31,7 @@ const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDel
                         <h3 className="card-title">{hotel.title}
                             {"   "}
                             <span className="float-right text-primary">
-                                {currencyFormatter({ amount: hotel.price, currency: 'usd' })}
+                                {currencyFormatter({ amount: hotel.price * 100, currency: 'usd' })}
                             </span></h3>
 
                         <p className="alert alert-info">
@@ -56,7 +56,7 @@ const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDel
 
 
                         <div className="d-flex justify-content-between h4">
-                            {showViewMoreBUtton && <button className="btn btn-primary" onClick={() => Navigate(`/hotel/${hotel._id}`)}>
+                            {showViewMoreBUtton && <button className="btn btn-primary" onClick={() => Navigate(`/hotel/view/${hotel._id}`)}>
                                 Show More
                             </button>}
 
