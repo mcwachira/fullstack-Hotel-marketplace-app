@@ -2,10 +2,15 @@ import React, { useState } from 'react'
 import { currencyFormatter } from '../utils/CurrencyFormatter'
 import { differenceInDays } from '../utils/DifferenceInDays'
 import { useNavigate, Link } from 'react-router-dom'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import OrderModal from './OrderModal'
 import { useSelector } from 'react-redux'
 
-const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDelete }) => {
+const BookingCard = ({ hotel,
+    session,
+    orderedBy, showViewMoreBUtton = true, handleDelete }) => {
+
+    const [showModal, setShowModal] = useState(false)
+
     const Navigate = useNavigate()
     const { auth } = useSelector((state) => ({ ...state }))
 
@@ -57,20 +62,13 @@ const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDel
 
 
 
+                        {showModal && <OrderModal session={session} orderedBy={orderedBy} showModal={showModal} setShowModal={setShowModal} />}
 
                         <div className="d-flex justify-content-between h4">
-                            {showViewMoreBUtton && <button className="btn btn-primary" onClick={() => Navigate(`/hotel/view/${hotel._id}`)}>
-                                Show More
-                            </button>}
+                            <button className="btn btn-primary" onClick={() => setShowModal(!showModal)}>
+                                Show Payment Info
+                            </button>
 
-
-                            {owner && <>
-                                <Link to={`/hotel/edit/${hotel._id}`}>
-                                    <EditOutlined className='text-warning' />
-                                </Link>
-
-                                <DeleteOutlined onClick={() => handleDelete(hotel._id)} className='text-danger' />
-                            </>}
 
 
                         </div>
@@ -81,4 +79,4 @@ const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDel
     )
 }
 
-export default HotelCards
+export default BookingCard

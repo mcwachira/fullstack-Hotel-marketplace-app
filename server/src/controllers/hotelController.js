@@ -1,5 +1,6 @@
 
 import Hotel from '../models/hotelModel.js'
+import Order from '../models/orderModel.js'
 import fs from 'fs'
 export const create = (req, res) => {
     console.log(req.fields)
@@ -117,6 +118,7 @@ export const getHotelById = async (req, res) => {
     console.log(id)
     try {
 
+        //this code enables us to remove hotel posted at earlier dates await Hotel.find({ from: { $gte: new Date() }
         const hotel = await Hotel.findById(id).populate('postedBy', "_id fullName").select('-image.data').exec()
         console.log(hotel)
 
@@ -176,3 +178,56 @@ export const updateHotel = async (req, res) => {
 }
 
 
+export const getUserHotelBookings = async (req, res) => {
+    console.log(req.user._id)
+
+    try {
+
+        const userBookings = await Order.find({ orderedBy: req.user._id }).select('session')
+            .populate('hotel', '-image.data')
+            .populate("orderedBy", "_id fullName")
+            .exec()
+
+        if (!userBookings) {
+            return res.status(404).json({ message: 'failed to get user booking' })
+        }
+        console.log(userBookings)
+
+        res.status(200).json(userBookings)
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+export const isAlreadyBooked = async (req, res) => {
+
+    const { hotelId } = req.params
+    // console.log(hotelId)
+
+    try {
+        //note to self find a better way of getting the hotel id instead of a for loop
+
+        //find the orders 
+        const userOrders = await Order.find({ orderedBy: req.user._id }).select('hotel').exec()
+
+        //check if hotel id is found in the user orders array
+
+        //array to store ids of the hotels booked by the user
+        let ids = [];
+
+        //lopping over each id
+        for (let i = 0; i < userOrders.length; i++) {
+            ids.push(userOrders[i].hotel.toString())
+        }
+
+        //sending ok if id si found
+        res.json({
+            ok: ids.includes(hotelId)
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}

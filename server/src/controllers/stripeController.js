@@ -197,6 +197,7 @@ export const stripeSuccess = async (req, res) => {
         //get the user who booked the hotel
         const user = await User.findById(req.user._id)
 
+        console.log('user id', user)
         //check if user has stripe session
         if (!user.stripeSession) return;
         //retriev the users stipe session
@@ -207,23 +208,24 @@ export const stripeSuccess = async (req, res) => {
         if (session.payment_status === 'paid') {
 
             //check if order exist 
-            const orderExist = Order.findOne({ 'session.id': session.id })
+            const orderExist = await Order.findOne({ 'session.id': session.id })
             if (orderExist) {
 
                 //if the order exist send success
                 res.json({ success: true })
             } else {
-                //creat a new order
+                //create a new order
 
                 let newOrder = await new Order({
                     hotel: hotelId,
                     session,
-                    postedBy: user._id,
+                    orderedBy: user._id,
+
                 }).save()
             }
 
 
-            //remove sstripe session
+            //remove stripe session
 
             await User.findByIdAndUpdate(user._id, {
                 $set: { stripeSession: {} },
