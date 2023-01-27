@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getHotelById } from '../../actions/hotel'
+import { getHotelById, isAlreadyBooked } from '../../actions/hotel'
 import { useParams, useNavigate } from 'react-router-dom'
 import moment from 'moment'
 import { differenceInDays } from '../../utils/DifferenceInDays'
@@ -11,6 +11,7 @@ const ViewHotel = () => {
     const [hotel, setHotel] = useState({})
     const [image, setImage] = useState("")
     const [loading, setLoading] = useState(false)
+    const [alreadyBooked, setAlreadyBooked] = useState(false)
 
 
     const { hotelId } = useParams()
@@ -29,7 +30,11 @@ const ViewHotel = () => {
 
     const handleClick = async (e) => {
         e.preventDefault()
-        if (!auth) Navigate('/login');
+        if (!auth || !auth.token) {
+            Navigate('/login')
+            return
+
+        };
 
         const response = await getSessionId(auth.token, hotelId)
         console.log(response.data)
@@ -43,6 +48,23 @@ const ViewHotel = () => {
     useEffect(() => {
 
         fetchHotelById()
+    }, [])
+
+
+    //check if hotel is booked
+
+    const isHotelBooked = async () => {
+        const res = await isAlreadyBooked(auth.token, hotelId)
+
+        if (res.data.ok) setAlreadyBooked(true)
+        console.log(res.data)
+    }
+    useEffect(() => {
+
+        if (auth && auth.token) {
+
+            isHotelBooked()
+        }
     }, [])
     return (
         <>
@@ -86,8 +108,8 @@ const ViewHotel = () => {
                         </i>
                         <br />
 
-                        <button className="btn btn-block btn-lg btn-primary mt-3" onClick={handleClick} >
-                            {loading ? "Loaidng " : auth && auth.token ? 'Book Now' : 'login to Book'}
+                        <button className="btn btn-block btn-lg btn-primary mt-3" onClick={handleClick} disabled={alreadyBooked || loading} >
+                            {loading ? "Loading " : alreadyBooked ? 'Already Booked' : auth && auth.token ? 'Book Now' : 'login to Book'}
 
                         </button>
                     </div>
