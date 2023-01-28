@@ -79,3 +79,10 @@ export const stripeSuccessRequest = async (token, hotelId) => await axios.post(
         }
     }
 )
+
+// export const searchListing = async (query) => {
+//     await axios.post(`${process.env.REACT_APP_API}/search-listing`, query)
+// }
+
+export const searchListing = async (query) =>
+    await axios.post(`${process.env.REACT_APP_API}/search-listing`, query);

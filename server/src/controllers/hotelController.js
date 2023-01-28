@@ -231,3 +231,22 @@ export const isAlreadyBooked = async (req, res) => {
     }
 
 }
+
+export const searchListings = async (req, res) => {
+    const { location, date, bed } = req.body;
+    // console.log(location, date, bed);
+    // console.log(date);
+    const fromDate = date.split(",");
+    // console.log(fromDate[0]);
+    let result = await Hotel.find({
+        from: { $gte: new Date(fromDate[0]) },
+        location,
+    })
+        .select("-image.data")
+        .exec();
+    // console.log("SEARCH LISTINGS", result);
+    res.json(result);
+};
+
+//search for  a hotel with a specific start date and end date
+//    let results = await Hotel.find({ from: { $gte: new Date() }, to:{$ly=te:to} location: location, bed:bed })

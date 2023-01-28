@@ -77,7 +77,7 @@ const EditHotel = () => {
         try {
             const res = await updateHotel(auth.token, hotelData, hotelId)
             console.log(res.data)
-            toast.success('hotel creatd succesfully')
+            toast.success('hotel Edited successfully')
             Navigate('/dashboard')
             setTimeout(() => {
                 window.location.reload();

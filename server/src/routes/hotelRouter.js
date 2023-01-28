@@ -1,5 +1,5 @@
 import express from 'express'
-import { create, getHotels, showHotelImage, sellerHotels, deleteHotel, getHotelById, updateHotel, getUserHotelBookings, isAlreadyBooked } from '../controllers/hotelController.js'
+import { create, getHotels, showHotelImage, sellerHotels, deleteHotel, getHotelById, updateHotel, getUserHotelBookings, isAlreadyBooked, searchListings } from '../controllers/hotelController.js'
 import { requireSignIn, hotelOwner } from '../middleware/requireSignIn.js'
 
 //formidable is when the api is recieving form data
@@ -21,5 +21,9 @@ router.get('/user-hotel-bookings', requireSignIn, getUserHotelBookings)
 
 //check if hotel is booked
 router.get('/is-already-booked/:hotelId', requireSignIn, isAlreadyBooked)
+
+//get search results
+
+router.post('/search-listing', searchListings)
 
 export default router
