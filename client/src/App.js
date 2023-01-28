@@ -10,6 +10,7 @@ import NewHotel from "./pages/hotels/NewHotel";
 import StripeCallback from "./pages/stripe/StripeCallback";
 import EditHotel from "./pages/hotels/EditHotel";
 import ViewHotel from "./pages/hotels/ViewHotel";
+import SearchResult from './pages/hotels/SearchResult'
 import StripeCancel from "./pages/stripe/StripeCancel";
 import StripeSuccess from "./pages/stripe/StripeSuccess";
 function App() {
@@ -55,6 +56,8 @@ function App() {
             </ProtectedRoute>
           } />
 
+
+          <Route path='/search-result' element={<SearchResult />} />
           <Route path='/stripe/callback' element={<StripeCallback />} />
           <Route path='/stripe/success/:hotelId' element={<StripeSuccess />} />
           <Route path='/stripe/cancel' element={<StripeCancel />} />

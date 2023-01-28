@@ -9,6 +9,7 @@ const HotelCards = ({ hotel, owner = false, showViewMoreBUtton = true, handleDel
     const Navigate = useNavigate()
     const { auth } = useSelector((state) => ({ ...state }))
 
+    console.log(hotel)
 
     return (
         <div className="card mb-3">
